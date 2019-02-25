@@ -1,0 +1,60 @@
+# Required
+library(doParallel)
+library(plotly)
+library(corrplot)
+library(caret)
+library(dplyr)
+# Find how many cores are on your machine
+detectCores() # Result = Typically 4 to 6
+
+# Create Cluster
+cl <- makeCluster(2)
+
+# Register Cluster
+registerDoParallel(cl)
+
+# Confirm how many cores are now "assigned" to R and RStudio
+getDoParWorkers() # Result 2 
+
+# Stop Cluster. After performing your tasks, stop your cluster. 
+stopCluster(cl)
+
+# iphone
+iphone_df <- iphone_smallmatrix_labeled_8d
+summary(iphone_df)
+str(iphone_df)
+
+# plotting and understanding the data 
+df <- iphone_df
+plot_ly(df, x= ~df$iphonesentiment, type='histogram')
+
+# Checking for missing data
+sum(is.na(df))
+
+corrData <- cor(df)
+corrplot(corrData)
+ncol(df)
+
+# Identifying collinear variables:
+s <- findCorrelation(corrData, cutoff = 0.9, verbose = FALSE, names = FALSE, exact = ncol(corrData))
+options(max.print=1000000)
+
+# Removing Collinear variables
+df[c(29,24,56,34,21,31,51,46,16,57,55,6,5)] <- NULL
+
+# Testing Collinearity:
+ncol(df)
+corrData <- cor(df)
+findCorrelation(corrData, cutoff = 0.9, verbose = FALSE, names = FALSE, exact = ncol(corrData))
+
+# Removing near zero vars:
+nzvMetrics <- nearZeroVar(df, saveMetrics = TRUE)
+str(nzvMetrics)
+
+# nearZeroVar() with saveMetrics = FALSE returns an vector 
+nzv <- nearZeroVar(df, saveMetrics = FALSE) 
+str(nzv)
+
+# create a new data set and remove near zero variance features
+iphoneNZV <- df[,-nzv]
+str(iphoneNZV)
