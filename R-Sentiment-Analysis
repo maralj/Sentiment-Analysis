@@ -56,5 +56,7 @@ nzv <- nearZeroVar(df, saveMetrics = FALSE)
 str(nzv)
 
 # create a new data set and remove near zero variance features
-iphoneNZV <- df[,-nzv]
-str(iphoneNZV)
+df_clean <- df[,-nzv]
+str(df_clean)
+
+
