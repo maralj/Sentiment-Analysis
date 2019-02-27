@@ -94,3 +94,8 @@ str(df)
 # cross validation 
 fitControl <- trainControl(method = "repeatedcv", number = 10, repeats = 1)
 
+# C5.0 Modeling 
+system.time(dt_c50 <- train(iphonesentiment~., data = df, method = 'C5.0', trControl=fitControl)) # X 
+
+# Random Forest 
+system.time(rf <- train(iphonesentiment~., data = df, method = 'rf', trControl = fitControl ))
