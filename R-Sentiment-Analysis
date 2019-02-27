@@ -59,4 +59,38 @@ str(nzv)
 df_clean <- df[,-nzv]
 str(df_clean)
 
+# Sample the data before using RFE
+set.seed(123)
+iphoneSample <- df_clean[sample(1:nrow(df), 1000, replace=FALSE),]
+nrow(iphoneSample)
+
+# Set up rfeControl with randomforest, repeated cross validation and no updates
+ctrl <- rfeControl(functions = rfFuncs, method = "repeatedcv", repeats = 5, verbose = FALSE)
+ncol(df_clean)
+
+# Using rfe and omitting the response variable (attribute 59 iphonesentiment) 
+rfeResults <- rfe(iphoneSample[,1:11], iphoneSample$iphonesentiment,sizes=(1:11), rfeControl=ctrl)
+
+rfeResults
+
+# Plot results
+plot(rfeResults, type=c("g", "o"))
+
+# create new data set with rfe recommended features
+iphoneRFE <- df_clean[,predictors(rfeResults)]
+str(iphoneRFE)
+
+# add the dependent variable to iphoneRFE
+iphoneRFE$iphonesentiment <- df_clean$iphonesentiment
+df$iphonesentiment <- as.factor(df$iphonesentiment)
+# review outcome
+str(iphoneRFE)
+
+dataPar <- createDataPartition(df$iphonesentiment, p = .70, list = FALSE)
+train_df <- df[dataPar,]
+test_df <- df[-dataPar,]
+str(df)
+
+# cross validation 
+fitControl <- trainControl(method = "repeatedcv", number = 10, repeats = 1)
 
