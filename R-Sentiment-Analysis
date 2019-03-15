@@ -1,10 +1,11 @@
-# Required
+# Required Packages
 library(doParallel)
 library(plotly)
 library(corrplot)
 library(caret)
 library(dplyr)
-# Find how many cores are on your machine
+
+# Finding how many cores are on my machine
 detectCores() # Result = Typically 4 to 6
 
 # Create Cluster
@@ -16,8 +17,8 @@ registerDoParallel(cl)
 # Confirm how many cores are now "assigned" to R and RStudio
 getDoParWorkers() # Result 2 
 
-# Stop Cluster. After performing your tasks, stop your cluster. 
-stopCluster(cl)
+# Stop Cluster.
+# stopCluster(cl)
 
 # iphone
 iphone_df <- iphone_smallmatrix_labeled_8d
@@ -59,7 +60,8 @@ str(nzv)
 df_clean <- df[,-nzv]
 str(df_clean)
 
-# Sample the data before using RFE
+# Sample the data before using Recursive Feature Elimination(RFE)
+
 set.seed(123)
 iphoneSample <- df_clean[sample(1:nrow(df), 1000, replace=FALSE),]
 nrow(iphoneSample)
