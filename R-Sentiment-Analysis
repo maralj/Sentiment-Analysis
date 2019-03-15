@@ -106,4 +106,8 @@ model_svm <- svm(iphonesentiment ~., data = df)
 psvm <- predict(model_svm, test_df) 
 postResample(psvm, test_df$iphonesentiment)
 
-
+# kknn (from the kknn package)
+library(kknn)
+knn1 <- train.kknn(iphonesentiment ~ ., data = df)#, kmax = 15)
+pknn <- predict(knn1, test_df) 
+postResample(pknn, test_df$iphonesentiment)
