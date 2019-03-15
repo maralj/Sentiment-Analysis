@@ -113,3 +113,23 @@ library(kknn)
 knn1 <- train.kknn(iphonesentiment ~ ., data = df)#, kmax = 15)
 pknn <- predict(knn1, test_df) 
 postResample(pknn, test_df$iphonesentiment)
+
+# Creating confusion matrix
+
+cm_dt <- confusionMatrix(pdt, test_df$iphonesentiment) 
+cmRF
+
+cmRF <- confusionMatrix(prf, test_df$iphonesentiment) 
+cmRF
+
+cmsvm <- confusionMatrix(psvm, test_df$iphonesentiment) 
+cmsvm
+
+cmknn <- confusionMatrix(pknn, test_df$iphonesentiment) 
+cmknn
+
+
+# Grouped bar chart to evaluate model performance
+Eval <- c(post_c50, post_rf, post_svm, post_knn)
+barplot(Eval, main = "Model Evaluation", col = c("darkblue","red"))
+
