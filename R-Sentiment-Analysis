@@ -99,3 +99,11 @@ system.time(dt_c50 <- train(iphonesentiment~., data = df, method = 'C5.0', trCon
 
 # Random Forest 
 system.time(rf <- train(iphonesentiment~., data = df, method = 'rf', trControl = fitControl ))
+
+# SVM (from the e1071 package) 
+library(e1071)
+model_svm <- svm(iphonesentiment ~., data = df)
+psvm <- predict(model_svm, test_df) 
+postResample(psvm, test_df$iphonesentiment)
+
+
